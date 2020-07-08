@@ -1,0 +1,82 @@
+git 本地管理&远程仓库管理
+git 本地管理
+设置用户名：
+git config  (--global) user.name ‘mxg133’
+设置用户名邮箱：
+git config (--global) user.email ‘396330646@qq.com’
+(在GitHub仓库主页显示谁提交了该文件 在(.git/config)/(~/.gitconfig)中查看，此设置与网络用户名无关)
+
+初始化一个新的git仓库
+1、创建文件夹
+	/Users/mxg/Soft/git/text
+2、在文件内初始化git(创建git仓库)->.git
+	cd /Users/mxg/Soft/git/text
+	git init
+3、添加到暂存区
+	git add 3.cpp （git add . 将当前本地文件全部添加到暂存区）
+从暂存区撤回某一个文件
+	git rm --cached 3.cpp (将3.cpp撤回到本地)
+4、提交到本地GitHub仓库
+	git commit -m ‘描述’ (3.cpp)
+
+删除仓库文件
+1、删除本地文件
+	rm -rf 3.cpp
+2、从Git中删除文件
+	git rm 3.cpp
+3、提交操作
+	git commit -m ‘提交描述’
+
+查看本地用户配置：
+	git config --list
+查看本地某一版本信息：
+	git show + hash码
+查看历史版本
+	git log 查看各个版本的hash码(详细信息) 「空格:下一页 b:上一页 q:退出」
+	git log --(pretty=)oneline 仅显示(简略)hash码 和 描述
+	git reflog 查看历史所有版本的hash码
+	git revert + hash码 删除这一步提交
+回滚操作
+	git reset --soft +hash码    只回滚归档区
+			(仅仅移动本地库的HEAD指针) 取消commit
+	git reset --mixed +hash码 想要回滚的版本的hash码
+			(移动本地库的HEAD指针+重置暂存区) 取消add 和 commit
+	git reset --hard +hash码   硬回滚至已经删除的hash码
+			(移动本地库的HEAD指针+重置暂存区+重置工作区)
+	git reset --hard HEAD^^/~2 回退/前进2步
+	git reset --hard HEAD 回到当前版本
+			(用于删除操作已经提交到暂存区，尚未提交到本地库，找回此文件)
+比较文件
+	git diff +hash码    		   工作区的此文件与(某个)多个文件比较
+	git diff +文件名                   工作区的此文件与暂存区的文件比较
+	git diff HEAD +文件名        工作区的此文件与本地库的文件比较
+	git diff HEAD^/~1 +文件名 工作区的此文件与前一个本地库的文件比较
+	git diff hash码 +文件名 工作区的此文件与前一个本地库的文件比较
+关于分支
+	git branch -v 查看有哪些分支
+	git branch b1 仅创建b1分支
+	git checkout -b b1 创建b1分支，并进入
+	git checkout master 进入master分支
+	git merge b1 将b1分支合并到当前分支
+查看帮助
+	git help reset
+
+Git 远程仓库管理
+Git 克隆操作(将远程仓库(GitHub对应的项目)拷贝到本地)
+	copy to clipboard(拷贝链接)
+本地库关联远端库 (注意不能创建README.md)
+	git remote add origin +远端仓库链接(库的名称是独立的)
+	git remote -v 查看当前本地库绑定的远端库
+	git push -u origin master 首次提交需要的操作
+下载仓库代码
+	git clone +仓库地址
+创建或修改文件(在本地模式下)
+	add -> submit(重复操作)
+从本地更新网络 （上传） （推送）
+	git push (origin) (master) 将本地某一分支同步到网络的某一分支
+	git push --set-upstream origin b2 将在本地建立的b2同步到网络
+从网络更新本地 （下载）（拉取）
+	1.git pull (origin)别人从本地提交到了网络，我从网络下载(并合并)
+	2.git fetch (origin) (master)别人从网络直接更改，我(仅)下载
+	3.git merge origin/master 将远程的master分支合并过来
+	(2 + 3 = 1)操作
